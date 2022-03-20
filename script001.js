@@ -592,6 +592,7 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('.popup__close_js')) {
     const popupTable2Html = document.querySelector('.popup__table2_js');
     if (popupTable2Html){
+      popupTable.width = "100%";
       popupTable2Html.remove();
     }
     popup.classList.remove('_active');
@@ -646,6 +647,8 @@ document.addEventListener('click', (e) => {
     popupDey.classList.remove('_active');
     // делает вибранным "самые новые"
     sortValue.options[0].selected = true;
+    // сортируем попак от самих новых
+    newValue();
     popupRenderDey.innerHTML = '';
     arrowAddRemove1();
   }
@@ -913,103 +916,218 @@ popupDey.addEventListener('scroll', function (e) {
 sortValue.addEventListener("change", function () {
   let arrayValue = getLocalStorage(oneInputValue, false);
   valuesLength.innerText = arrayValue.length;
-  if (!popupReverse.classList.contains('_reverse')){
-    // сортировка самые новые
-    if (Number(this.value) == 1) {
+
+  // сортировка самые новые
+  if (Number(this.value) == 1) {
+    newValue();
+    function newValue () {
       arrayValue.sort(function (a, b) {
         return a.miliseconds - b.miliseconds;
       });
       popupTable.innerHTML = '';
 
-      arrayValue.forEach(item => {
-        // рендерит етот обект в попап
-        renderValuePopup(item);
-      });
+      if (popupReverse.classList.contains('_reverse')) {
+        const popupTable2 = document.querySelector('.popup__table2_js');
+        popupTable2.innerHTML = '';
+        arrayValue.forEach(item => {
+          // рендерит етот обект в попап
+          renderValuePopupTo(item, popupTable2, 1);
+          renderValuePopupTo(item, popupTable2, 2);
+        })
+      } else {
+        arrayValue.forEach(item => {
+          // рендерит етот обект в попап
+          renderValuePopup(item);
+        });
+      }
     }
-    // сортировка По значению больше
-    if (Number(this.value) == 2) {
+  }
+
+  // сортировка По значению больше
+  if (Number(this.value) == 2) {
+    popupTable.innerHTML = '';
+
+    console.log(this.value);
+    if (popupReverse.classList.contains('_reverse')) {
+      const popupTable2 = document.querySelector('.popup__table2_js');
+
       arrayValue.sort(function (a, b) {
-        return a.value - b.value;
+        return a.value2 - b.value2;
       });
-      popupTable.innerHTML = '';
 
       arrayValue.forEach(item => {
         // рендерит етот обект в попап
-        renderValuePopup(item);
+        renderValuePopupTo(item, popupTable2, 1);
       })
+
+      arrayValue.sort(function (a, b) {
+        return a.value3 - b.value3;
+      });
+      popupTable2.innerHTML = '';
+
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 2);
+      });
+    } else {
+      arrayValue.sort(function (a, b) {
+        return a.value - b.value;
+      });
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopup(item);
+      });
     }
-    // сортировка По значению менше
-    if (Number(this.value) == 3) {
+  }
+    
+  // сортировка По значению менше
+  if (Number(this.value) == 3) {
+    popupTable.innerHTML = '';
+
+    if (popupReverse.classList.contains('_reverse')) {
+      const popupTable2 = document.querySelector('.popup__table2_js');
+
+      arrayValue.sort(function (a, b) {
+        return b.value2 - a.value2;
+      });
+
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 1);
+      });
+
+      arrayValue.sort(function (a, b) {
+        return b.value3 - a.value3;
+      });
+      popupTable2.innerHTML = '';
+
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 2);
+      });
+    } else {
       arrayValue.sort(function (a, b) {
         return b.value - a.value;
       });
-      popupTable.innerHTML = '';
-
-      arrayValue.forEach(item => {
-        // рендерит етот обект в попап
-        renderValuePopup(item);
-      })
-    }
-    // сортировка самые старые
-    if (Number(this.value) == 4) {
-      arrayValue.sort(function (a, b) {
-        return b.miliseconds - a.miliseconds;
-      });
-      popupTable.innerHTML = '';
 
       arrayValue.forEach(item => {
         // рендерит етот обект в попап
         renderValuePopup(item);
       });
-    }
+    } 
+  }
 
-    // сортировка Больше за 24год.
-    if (Number(this.value) == 5) {
-      const miliseconds = Date.now();
-      let newArray = [];
+  // сортировка самые старые
+  if (Number(this.value) == 4) {
+    popupTable.innerHTML = '';
+    arrayValue.sort(function (a, b) {
+      return b.miliseconds - a.miliseconds;
+    });
+
+    if (popupReverse.classList.contains('_reverse')) {
+      const popupTable2 = document.querySelector('.popup__table2_js');
+      popupTable2.innerHTML = '';
 
       arrayValue.forEach(item => {
-        if (miliseconds - item.miliseconds < 86400000) {
-          newArray.push(item);
-        }
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 1);
+      });
+
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 2);
+      });
+    } else {
+      arrayValue.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopup(item);
+      });
+    }
+  }
+  // сортировка Больше за 24год.
+  if (Number(this.value) == 5) {
+    const miliseconds = Date.now();
+    let newArray = [];
+
+    arrayValue.forEach(item => {
+      if (miliseconds - item.miliseconds < 86400000) {
+        newArray.push(item);
+      }
+    });
+    valuesLength.innerText = newArray.length;
+    popupTable.innerHTML = '';
+
+    if (popupReverse.classList.contains('_reverse')) {
+      const popupTable2 = document.querySelector('.popup__table2_js');
+      popupTable2.innerHTML = '';
+
+      newArray.sort(function (a, b) {
+        return a.value2 - b.value2;
+      });
+      newArray.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 1);
       });
 
       newArray.sort(function (a, b) {
+        return a.value3 - b.value3;
+      });
+      newArray.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 2);
+      });
+    } else {
+      newArray.sort(function (a, b) {
         return a.value - b.value;
       });
-      popupTable.innerHTML = '';
-
       newArray.forEach(item => {
         // рендерит етот обект в попап
         renderValuePopup(item);
       });
+    } 
+  }
+  // сортировка Меньше за 24год..
+  if (Number(this.value) == 6) {
+    const miliseconds = Date.now();
+    let newArray = [];
 
-      valuesLength.innerText = newArray.length;
-    }
+    arrayValue.forEach(item => {
+      if (miliseconds - item.miliseconds < 86400000) {
+        newArray.push(item);
+      }
+    });
+    valuesLength.innerText = newArray.length;
+    popupTable.innerHTML = '';
 
-    // сортировка Меньше за 24год..
-    if (Number(this.value) == 6) {
-      const miliseconds = Date.now();
-      let newArray = [];
 
-      arrayValue.forEach(item => {
-        if (miliseconds - item.miliseconds < 86400000) {
-          newArray.push(item);
-        }
+    if (popupReverse.classList.contains('_reverse')) {
+      const popupTable2 = document.querySelector('.popup__table2_js');
+      popupTable2.innerHTML = '';
+
+      newArray.sort(function (a, b) {
+        return b.value2 - a.value2;
+      });
+      newArray.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 1);
       });
 
       newArray.sort(function (a, b) {
+        return b.value3 - a.value3;
+      });
+      newArray.forEach(item => {
+        // рендерит етот обект в попап
+        renderValuePopupTo(item, popupTable2, 2);
+      });
+    } else {
+      newArray.sort(function (a, b) {
         return b.value - a.value;
       });
-      popupTable.innerHTML = '';
-
       newArray.forEach(item => {
         // рендерит етот обект в попап
         renderValuePopup(item);
       });
-
-      valuesLength.innerText = newArray.length;
-    }
+    } 
   }
   // сортировка Средние по часам.
   if (Number(this.value) == 7) {
@@ -1090,33 +1208,6 @@ sortValue.addEventListener("change", function () {
     setTimeout(() => {
       arrowAddRemove2();
     }, 200);
-  }
-
-  // сортировка Больше 2
-  if (Number(this.value) == 8) {
-    if (popupReverse.classList.contains('_reverse')) {
-      const popupTable2 = document.querySelector('.popup__table2_js');
-
-      arrayValue.sort(function (a, b) {
-        return a.value2 - b.value2;
-      });
-      popupTable.innerHTML = '';
-
-      arrayValue.forEach(item => {
-        // рендерит етот обект в попап
-        renderValuePopupTo(item, popupTable2, 1);
-      })
-
-      arrayValue.sort(function (a, b) {
-        return a.value3 - b.value3;
-      });
-      popupTable2.innerHTML = '';
-
-      arrayValue.forEach(item => {
-        // рендерит етот обект в попап
-        renderValuePopupTo(item, popupTable2, 2);
-      })
-    }
   }
 });
 
