@@ -605,13 +605,16 @@ document.addEventListener('click', (e) => {
   // если кликнули по кнопке реверс в попапе
   if (e.target.closest('.popup__reverse_js')){
     // делает вибранным "самые новые"
+    const popupDelet = document.querySelector('.popup__delet_js');
     sortValue.options[0].selected = true;
     let arrayValue = getLocalStorage(oneInputValue, false);
+    valuesLength.innerText = arrayValue.length;
 
     if(e.target.classList.contains('_reverse')){
+      popupDelet.style.display = 'block';
+      selectButton.style.display = 'block';
       e.target.classList.remove('_reverse');
       popupTable.width = "100%";
-      valuesLength.innerText = arrayValue.length;
       // сортировка самые новые
       arrayValue.sort(function (a, b) {
         return a.miliseconds - b.miliseconds;
@@ -625,6 +628,8 @@ document.addEventListener('click', (e) => {
       });
 
     }else{
+      popupDelet.style.display = 'none';
+      selectButton.style.display = 'none';
       e.target.classList.add('_reverse');
       popupTable.innerHTML = '';
       popupTable.width = "50%";
@@ -648,7 +653,7 @@ document.addEventListener('click', (e) => {
     // делает вибранным "самые новые"
     sortValue.options[0].selected = true;
     // сортируем попак от самих новых
-    newValue();
+    newValuePopup();
     popupRenderDey.innerHTML = '';
     arrowAddRemove1();
   }
@@ -919,35 +924,13 @@ sortValue.addEventListener("change", function () {
 
   // сортировка самые новые
   if (Number(this.value) == 1) {
-    newValue();
-    function newValue () {
-      arrayValue.sort(function (a, b) {
-        return a.miliseconds - b.miliseconds;
-      });
-      popupTable.innerHTML = '';
-
-      if (popupReverse.classList.contains('_reverse')) {
-        const popupTable2 = document.querySelector('.popup__table2_js');
-        popupTable2.innerHTML = '';
-        arrayValue.forEach(item => {
-          // рендерит етот обект в попап
-          renderValuePopupTo(item, popupTable2, 1);
-          renderValuePopupTo(item, popupTable2, 2);
-        })
-      } else {
-        arrayValue.forEach(item => {
-          // рендерит етот обект в попап
-          renderValuePopup(item);
-        });
-      }
-    }
+    newValuePopup();
   }
 
   // сортировка По значению больше
   if (Number(this.value) == 2) {
     popupTable.innerHTML = '';
 
-    console.log(this.value);
     if (popupReverse.classList.contains('_reverse')) {
       const popupTable2 = document.querySelector('.popup__table2_js');
 
@@ -1212,6 +1195,29 @@ sortValue.addEventListener("change", function () {
 });
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function newValuePopup() {
+  let arrayValue = getLocalStorage(oneInputValue, false);
+  valuesLength.innerText = arrayValue.length;
+  arrayValue.sort(function (a, b) {
+    return a.miliseconds - b.miliseconds;
+  });
+  popupTable.innerHTML = '';
+
+  if (popupReverse.classList.contains('_reverse')) {
+    const popupTable2 = document.querySelector('.popup__table2_js');
+    popupTable2.innerHTML = '';
+    arrayValue.forEach(item => {
+      // рендерит етот обект в попап
+      renderValuePopupTo(item, popupTable2, 1);
+      renderValuePopupTo(item, popupTable2, 2);
+    })
+  } else {
+    arrayValue.forEach(item => {
+      // рендерит етот обект в попап
+      renderValuePopup(item);
+    });
+  }
+}
 // рендерит таблицы в попап popupRenderDey
 function renderTable(day, month, year, counterTableId, arrayDey) {
   let idTable = `table${counterTableId}`;
