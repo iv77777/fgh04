@@ -605,14 +605,11 @@ document.addEventListener('click', (e) => {
   // если кликнули по кнопке реверс в попапе
   if (e.target.closest('.popup__reverse_js')){
     // делает вибранным "самые новые"
-    const popupDelet = document.querySelector('.popup__delet_js');
     sortValue.options[0].selected = true;
     let arrayValue = getLocalStorage(oneInputValue, false);
     valuesLength.innerText = arrayValue.length;
 
     if(e.target.classList.contains('_reverse')){
-      popupDelet.style.display = 'block';
-      selectButton.style.display = 'block';
       e.target.classList.remove('_reverse');
       popupTable.width = "100%";
       // сортировка самые новые
@@ -628,8 +625,6 @@ document.addEventListener('click', (e) => {
       });
 
     }else{
-      popupDelet.style.display = 'none';
-      selectButton.style.display = 'none';
       e.target.classList.add('_reverse');
       popupTable.innerHTML = '';
       popupTable.width = "50%";

@@ -563,6 +563,9 @@ body{
   body{
     font-size: 19px;
   }
+  .td__date.fontSize {
+    font-size: 16px;
+  }
 }
 
 @media(min-width: 450px){
