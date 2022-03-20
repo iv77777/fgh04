@@ -609,6 +609,7 @@ document.addEventListener('click', (e) => {
 
     if(e.target.classList.contains('_reverse')){
       e.target.classList.remove('_reverse');
+      popupTable.width = "100%";
       valuesLength.innerText = arrayValue.length;
       // сортировка самые новые
       arrayValue.sort(function (a, b) {
@@ -625,8 +626,9 @@ document.addEventListener('click', (e) => {
     }else{
       e.target.classList.add('_reverse');
       popupTable.innerHTML = '';
+      popupTable.width = "50%";
       let popupTable2 = `
-      <table class="popup__table popup__table2_js" cellpadding="100" border="2" width="100%">
+      <table class="popup__table popup__table2_js" cellpadding="100" border="2" width="50%">
        
       </table>
     `;
