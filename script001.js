@@ -681,6 +681,7 @@ document.addEventListener('click', (e) => {
     saveObgect.numberDeta = numberDeta;
     saveObgect.month = month;
     saveObgect.year = year;
+    saveObgect.Minutes = Minutes;
     saveObgect.miliseconds = Date.now();
     saveObgect.date = `${DATE1}, ${DATE2} `
     saveObgect.value = input7Js.value;
@@ -1113,6 +1114,7 @@ sortValue.addEventListener("change", function () {
     let indexTable = 1;
     popupRenderDey.innerHTML = '';
     popupDey.classList.add('_active');
+
     // все года
     const years = [];
     // выбераем года
@@ -1162,8 +1164,12 @@ sortValue.addEventListener("change", function () {
             }
           });
 
-          if (arrayDey.length > 0){            
-            renderTable(indexDey, months[indexMonths], year, indexTable, arrayDey);
+          if (arrayDey.length > 0){ 
+            if (!popupReverse.classList.contains('_reverse')) {
+              renderTable(indexDey, months[indexMonths], year, indexTable, arrayDey);
+            }else{
+              renderTable2(indexDey, months[indexMonths], year, indexTable, arrayDey);
+            }
             indexTable++;
           }
           
@@ -1236,7 +1242,6 @@ function renderTable(day, month, year, counterTableId, arrayDey) {
 
   renderDeyFunc(arrayDey, idTable);
 }
-
 function renderDeyFunc(arrayValueDey, idTable) {
   for (let counter = 0; counter < 24; counter++) {
     let newArray = [];
@@ -1270,7 +1275,6 @@ function renderDeyFunc(arrayValueDey, idTable) {
     // --------------------------------------------------------------
   }
 }
-
 // рендерит сортировку Средние по часам в таблицы.
 function renderhourse(time, value, number, idTable) {
   let valueHtml = `
@@ -1284,6 +1288,136 @@ function renderhourse(time, value, number, idTable) {
   popupTable.insertAdjacentHTML('beforeend', valueHtml);
   // popupTable.insertAdjacentHTML('afterbegin', valueHtml);
 }
+// рендерит таблицы в попап popupRenderDey
+function renderTable2(day, month, year, counterTableId, arrayDey) {
+  let idTable = `table${counterTableId}`;
+
+  const months = ['січеня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+
+  const htmlTable = `
+      <div class="popupDeyTable font__smail">
+        <div class="flex-block tebleTitle">
+          <p>${day} ${months[month - 1]} ${year}</p>
+          <p>
+          ${arrayDey.length} зн.
+          </p>
+        </div>
+        <div class="table__wrapper">
+          <div class="table__inner table__inner1-${idTable}_js"> </div>
+          <div class="table__inner table__inner2-${idTable}_js"> </div>
+        </div>
+      </div>
+    `;
+  popupRenderDey.insertAdjacentHTML('beforeend', htmlTable);
+
+  renderDeyFunc2(arrayDey, idTable);
+}
+function renderDeyFunc2(arrayValueDey, idTable) {
+  for (let counter = 0; counter < 24; counter++) {
+    let newArray = [];
+
+    arrayValueDey.forEach(item => {
+      if (item.hourse == counter) {
+        newArray.push(item);
+      }
+    });
+    
+    if(newArray.length){
+      const tableInner1 = document.querySelector(`.table__inner1-${idTable}_js`);
+      const tableInner2 = document.querySelector(`.table__inner2-${idTable}_js`);
+      let bg1 = "";
+      let bg2 = "";
+
+      const table1 = document.createElement("div");
+      table1.className = "table";
+      const tableClock1 = document.createElement("div");
+      tableClock1.className = 'table__clock';
+      tableClock1.innerHTML = counter;
+      table1.insertAdjacentElement('afterbegin', tableClock1);
+      const tableValue1 = document.createElement("div");
+      tableValue1.className = "table__value";
+
+      const table2 = document.createElement("div");
+      table2.className = "table";
+      const tableClock2 = document.createElement("div");
+      tableClock2.className = 'table__clock';
+      tableClock2.innerHTML = counter;
+      table2.insertAdjacentElement('afterbegin', tableClock2);
+      const tableValue2 = document.createElement("div");
+      tableValue2.className = "table__value";
+
+      newArray.forEach(item =>{
+        if (item.background == "background__acent-2"){
+          bg1 = 'background__acent-1';
+          bg2 = 'background__acent-2';
+        }else{
+          bg1 = 'background__acent-2';
+          bg2 = 'background__acent-1';
+        }
+        if(!item.Minutes){
+          item.Minutes = "--";
+        }
+        const ul1 = `
+        <ul class="table__value-list">
+          <li class="table__value-item">${item.hourse}:${item.Minutes}</li>
+          <li class="table__value-item ${bg1}">${item.value2}
+            <span class="table__value-item__span">1</span>
+          </li>
+        </ul>
+      `;
+        tableValue1.insertAdjacentHTML('beforeEnd', ul1);
+        const ul2 = `
+        <ul class="table__value-list">
+          <li class="table__value-item">${item.hourse}:${item.Minutes}</li>
+          <li class="table__value-item ${bg2}">${item.value3}
+            <span class="table__value-item__span">1</span>
+          </li>
+        </ul>
+      `;
+        tableValue2.insertAdjacentHTML('beforeEnd', ul2);
+      });
+
+      table1.insertAdjacentElement('beforeEnd', tableValue1);
+      table2.insertAdjacentElement('beforeEnd', tableValue2);
+      
+      tableInner1.insertAdjacentElement('beforeend', table1);
+      tableInner2.insertAdjacentElement('beforeend', table2);
+    }else{
+      const tableInner1 = document.querySelector(`.table__inner1-${idTable}_js`);
+      const tableInner2 = document.querySelector(`.table__inner2-${idTable}_js`);
+      let valueHtml1 = `
+          <div class="table">
+              <div class="table__clock">${counter}</div>
+              <div class="table__value">
+                <ul class="table__value-list">
+                  <li class="table__value-item">--</li>
+                  <li class="table__value-item">--
+                    <span class="table__value-item__span">1</span>
+                  </li>
+                </ul>
+              </div>
+          </div>
+        `;
+      let valueHtml2 = `
+          <div class="table">
+              <div class="table__clock">${counter}</div>
+              <div class="table__value">
+                <ul class="table__value-list">
+                  <li class="table__value-item">--</li>
+                  <li class="table__value-item">-- 
+                    <span class="table__value-item__span">2</span>
+                  </li>
+                </ul>
+              </div>
+          </div>
+        `;
+      tableInner1.insertAdjacentHTML('beforeend', valueHtml1);
+      tableInner2.insertAdjacentHTML('beforeend', valueHtml2);
+    }
+  }
+}
+
+
 // сортировка Средние по часам начиная з большого
 function sortPopupDeyTable() {
   const sortPopupDeyTable = document.querySelectorAll('.sortPopupDeyTable_js');
