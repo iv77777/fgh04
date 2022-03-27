@@ -30,7 +30,6 @@
   background-color: var(--background-3);
 }
 
-
 html{
   width: 100%;
   height: 100%;
@@ -38,7 +37,7 @@ html{
 }
 body{
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   background-color: #100636;
@@ -238,7 +237,7 @@ body{
   position: fixed;
   bottom: 20px;
   right: 15px;
-  z-index: 30;
+  z-index: 20;
   border-radius: 50px;
   width: 50px;
   height: 50px;
@@ -266,10 +265,14 @@ body{
   height: 50px;
   background-color: var(--background-5);
 }
+
+.calendar__btn{
+  border-radius: 5px;
+  padding: 10px;
+  color: var(--background-1);
+  background-color: var(--background-5);
+}
 .popupDey__sort-big{
-  position: absolute;
-  right: 5px;
-  top: 5px;
   border-radius: 5px;
   width: 50px;
   height: 50px;
@@ -622,12 +625,112 @@ body{
   right: -2px;
   display: none;
 }
-.bc1{
-  background-color: #ffeb3b;
+
+/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< calendar >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+.calendar-popap{
+  opacity: 0;
+  visibility: hidden;
+  background-color: #000;
+  color: #fff;
+  overflow-y: auto;
+  padding-bottom: 20px;
+
+  position: fixed;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transition: all .3s;
 }
-.bc2{
-  background-color: #e7b2f1;
+.calendar-popap._active{
+  opacity: 1;
+  visibility: visible;
+  transition: all .3s;
 }
+
+.calendar__year{
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 40px;
+}
+.calendar__container{
+  max-width: 600px;
+  position: relative;
+  padding-top: 15px;
+}
+/* -------------------------- */
+.calendar__month-wrapper{
+  display: grid;
+  grid-template-columns:  repeat(auto-fill, minmax(155px, 1fr));
+  overflow: hidden;
+  gap: 1px;
+}
+.calendar__month-inner {
+  border: 1px solid transparent;
+  background-color: #322222;
+  transition: all .3s;
+  padding: 7px;
+  position: relative;
+}
+.calendar__month-inner._active {
+  transition: all .3s;
+  z-index: 12;
+}
+.calendar__month-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+  padding-left: 2px;
+}
+.calendar__list {
+  text-align: center;
+  font-size: 14px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.calendar__dey {
+  border-radius: 3px;
+  padding: 2px 1px;
+}
+.calendar__dey._active{
+  background-color: #543f3f;
+}
+._selection .calendar__dey:hover {
+  background-color: #37474f;
+}
+._selection ._active.calendar__dey:hover{
+  cursor: pointer;
+}
+._selection ._active.calendar__dey:active {
+  background-color: red;
+}
+.calendar__dey.color-non,
+._selection .calendar__dey.color-non{
+  background-color: transparent;
+  cursor: default;
+}
+
+.fon2._active{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000b5;
+  z-index: 11;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s ;
+}
+.fon2._active{
+  visibility: visible;
+  opacity: 1;
+}
+/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<// calendar >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+
 /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>> */
 @media (max-width: 400px){
   .select__button {
