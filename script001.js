@@ -983,13 +983,53 @@ sortValue.addEventListener("change", function () {
       renderValuePopup(item);
     });
   }
-  // сортировка Больше за 24год.
+  // выборка по времини и сортировка от Больше. за 1-сутки
   if (Number(this.value) == 5) {
+    bigTime(arrayValue, 86400000)
+  }
+  // выборка по времини и сортировка от Больше. за 2-суток
+  if (Number(this.value) == 8) {
+    bigTime(arrayValue, 86400000 * 2)
+  }
+  // выборка по времини и сортировка от Больше. за 3-суток
+  if (Number(this.value) == 10) {
+    bigTime(arrayValue, 86400000 * 3)
+  }
+  // выборка по времини и сортировка от Больше. за 4-суток
+  if (Number(this.value) == 12) {
+    bigTime(arrayValue, 86400000 * 4)
+  }
+  // выборка по времини и сортировка от Больше. за 5-суток
+  if (Number(this.value) == 14) {
+    bigTime(arrayValue, 86400000 * 5)
+  }
+  // выборка по времини и сортировка от Больше. за 6-суток
+  if (Number(this.value) == 16) {
+    bigTime(arrayValue, 86400000 * 6)
+  }
+  // выборка по времини и сортировка от Больше. за 7-суток
+  if (Number(this.value) == 18) {
+    bigTime(arrayValue, 86400001 * 7)
+  }
+  // выборка по времини и сортировка от Больше. за 8-суток
+  if (Number(this.value) == 20) {
+    bigTime(arrayValue, 86400000 * 8)
+  }
+  // выборка по времини и сортировка от Больше. за 9-суток
+  if (Number(this.value) == 22) {
+    bigTime(arrayValue, 86400000 * 9)
+  }
+  // выборка по времини и сортировка от Больше. за 10-суток
+  if (Number(this.value) == 24) {
+    bigTime(arrayValue, 86400000 * 10)
+  }
+
+  function bigTime(arrayValue, time) {
     const miliseconds = Date.now();
     let newArray = [];
 
     arrayValue.forEach(item => {
-      if (miliseconds - item.miliseconds < 86400000) {
+      if (miliseconds - item.miliseconds < time) {
         newArray.push(item);
       }
     });
@@ -1004,13 +1044,52 @@ sortValue.addEventListener("change", function () {
       renderValuePopup(item);
     });
   }
-  // сортировка Меньше за 24год..
+  // выборка по времини и сортировка от Меньше за 1-сутки
   if (Number(this.value) == 6) {
+    smallTime(arrayValue, 86400000);
+  }
+  // выборка по времини и сортировка от Меньше за 2-суток
+  if (Number(this.value) == 9) {
+    smallTime(arrayValue, 86400000 * 2);
+  }
+  // выборка по времини и сортировка от Меньше за 3-суток
+  if (Number(this.value) == 11) {
+    smallTime(arrayValue, 86400000 * 3)
+  }
+  // выборка по времини и сортировка от Меньше за 4-суток
+  if (Number(this.value) == 13) {
+    smallTime(arrayValue, 86400000 * 4)
+  }
+  // выборка по времини и сортировка от Меньше за 5-суток
+  if (Number(this.value) == 15) {
+    smallTime(arrayValue, 86400000 * 5)
+  }
+  // выборка по времини и сортировка от Меньше за 6-суток
+  if (Number(this.value) == 17) {
+    smallTime(arrayValue, 86400000 * 6)
+  }
+  // выборка по времини и сортировка от Меньше за 7-суток
+  if (Number(this.value) == 19) {
+    smallTime(arrayValue, 86400001 * 7)
+  }
+  // выборка по времини и сортировка от Меньше за 8-суток
+  if (Number(this.value) == 21) {
+    smallTime(arrayValue, 86400000 * 8)
+  }
+  // выборка по времини и сортировка от Меньше за 9-суток
+  if (Number(this.value) == 23) {
+    smallTime(arrayValue, 86400000 * 9)
+  }
+  // выборка по времини и сортировка от Меньше за 10-суток
+  if (Number(this.value) == 25) {
+    smallTime(arrayValue, 86400000 * 10)
+  }
+  function smallTime(arrayValue, time) {
     const miliseconds = Date.now();
     let newArray = [];
 
     arrayValue.forEach(item => {
-      if (miliseconds - item.miliseconds < 86400000) {
+      if (miliseconds - item.miliseconds < time) {
         newArray.push(item);
       }
     });
@@ -1025,6 +1104,7 @@ sortValue.addEventListener("change", function () {
       renderValuePopup(item);
     });
   }
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   // сортировка Средние по часам.
   if (Number(this.value) == 7) {
     openSortPopup(arrayValue);
