@@ -696,11 +696,11 @@ body{
   padding: 2px 1px;
 }
 .calendar__dey._active{
-  background-color: #543f3f;
+  background-color: #7c6d6d;
 }
-._selection .calendar__dey:hover {
+/* ._selection .calendar__dey:hover {
   background-color: #37474f;
-}
+} */
 ._selection ._active.calendar__dey:hover{
   cursor: pointer;
 }
