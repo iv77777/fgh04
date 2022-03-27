@@ -766,3 +766,25 @@ body{
   right: calc(50% - 200px);
 }
 }
+
+@media(min-width: 600px){
+  .calendar__container{
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .calendar__list{
+    font-size: 23px;
+  }
+  .calendar__month-wrapper {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 5px;
+    padding: 15px;
+  }
+  .calendar__month-inner._active{
+    transform: scale(1.1);
+  }
+  .calendar__year {
+    margin-bottom: 0px;
+    line-height: 40px;
+  }
+}

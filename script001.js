@@ -1468,22 +1468,25 @@ calendarPopap.addEventListener('click', (e) => {
       item.style.cssText = '';
     })
   }
+  
   if (e.target.closest('.calendar__month-inner_js')) {
     const calendarMonthInner = e.target.closest('.calendar__month-inner_js');
     const calendarMonthWrapper = e.target.closest('.calendar__month-wrapper_js');
-    
+
     // ------------------------------------------
-    if (e.target.closest('.calendar__dey_js ') 
-        && e.target.classList.contains('_active') 
-        && calendarMonthInner.classList.contains('_active')) {
-            
+    if (e.target.closest('.calendar__dey_js ')
+      && e.target.classList.contains('_active')
+      && calendarMonthInner.classList.contains('_active')) {
+
+      const calendarPopap = document.querySelector('.calendar-popap_js');
+      
       calendarPopap.classList.remove('_active');//скрывает календарь
       calendarBtn.innerHTML = e.target.dataset.dey;
       const popupReverse = document.querySelector('.popup__reverse_js');
 
-      if (popupReverse.classList.contains('_reverse') || popupDey.classList.contains('_active')){
+      if (popupReverse.classList.contains('_reverse') || popupDey.classList.contains('_active')) {
         scrollDey1(e.target.dataset.deydata);
-      }else{
+      } else {
         scrollDey2(e.target.dataset.deydata);
       }
     }
@@ -1491,31 +1494,34 @@ calendarPopap.addEventListener('click', (e) => {
     calendarMonthInner.classList.toggle('_selection');// дозволяет запрещает hover на днях
     fon2.classList.toggle('_active');//скрывает показует фон
     // ------------------------------------------
+    
+    
+    if (calendarPopap.offsetWidth < 600) {
+      const MonthWrapperWidth = calendarMonthWrapper.offsetWidth;
+      const windowInnerHeight = window.innerHeight;
 
-    const MonthWrapperWidth = calendarMonthWrapper.offsetWidth;
-    const windowInnerHeight = window.innerHeight;
+      const MonthWrapperLeft = calendarMonthWrapper.offsetLeft;
 
-    const MonthWrapperLeft = calendarMonthWrapper.offsetLeft;
+      const MonthInnerWidth = calendarMonthInner.offsetWidth;
+      const MonthInnerHeight = calendarMonthInner.offsetHeight;
+      const MonthInnerLeft = calendarMonthInner.offsetLeft - MonthWrapperLeft;
 
-    const MonthInnerWidth = calendarMonthInner.offsetWidth;
-    const MonthInnerHeight = calendarMonthInner.offsetHeight;
-    const MonthInnerLeft = calendarMonthInner.offsetLeft - MonthWrapperLeft;
+      let scale = MonthWrapperWidth / MonthInnerWidth;
 
-    let scale = MonthWrapperWidth / MonthInnerWidth;
+      if (scale > 3) {
+        scale = 3;
+      }
 
-    if (scale > 3) {
-      scale = 3;
-    }
+      if (calendarMonthInner.classList.contains("_active")) {
+        const MonthInnerTop = calendarMonthInner.getBoundingClientRect().top;
+        let ttX = (MonthWrapperWidth / 2) - (MonthInnerWidth / 2) - MonthInnerLeft;
+        let ttY = (windowInnerHeight / 2) - (MonthInnerHeight / 2) - MonthInnerTop;
 
-    if (calendarMonthInner.classList.contains("_active")) {
-      const MonthInnerTop = calendarMonthInner.getBoundingClientRect().top;
-      let ttX = (MonthWrapperWidth / 2) - (MonthInnerWidth / 2) - MonthInnerLeft;
-      let ttY = (windowInnerHeight / 2) - (MonthInnerHeight / 2) - MonthInnerTop;
-
-      calendarMonthInner.style.cssText = `transform: scale(${scale})
-                                          translate(${ttX / scale}px, ${ttY / scale}px);`;
-    } else {
-      calendarMonthInner.style.cssText = '';
+        calendarMonthInner.style.cssText = `transform: scale(${scale})
+                                        translate(${ttX / scale}px, ${ttY / scale}px);`;
+      } else {
+        calendarMonthInner.style.cssText = '';
+      }
     }
   }
 });
@@ -1526,15 +1532,18 @@ function scrollDey1(data){
 }
 function scrollDey2(data){
   const scrolElement = document.querySelector(`._teblepopup${data}`); 
-  scrolElement.classList.add('_active-scrol-tim');
-  scrolElement.classList.add('_active-scrol');
-  setTimeout(() => {
-    scrolElement.classList.remove('_active-scrol');
-  }, 400);
-  setTimeout(() => {
-    scrolElement.classList.remove('_active-scrol-tim');
-  }, 6000);
-  scrolling(scrolElement.offsetTop);
+  if (scrolElement){
+    scrolElement.classList.add('_active-scrol-tim');
+    scrolElement.classList.add('_active-scrol');
+    setTimeout(() => {
+      scrolElement.classList.remove('_active-scrol');
+    }, 400);
+    setTimeout(() => {
+      scrolElement.classList.remove('_active-scrol-tim');
+    }, 6000);
+    scrolling(scrolElement.offsetTop);
+  }
+ 
 }
 
 function scrolling(top) {
