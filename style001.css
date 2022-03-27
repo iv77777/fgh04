@@ -206,6 +206,12 @@ body{
   position: sticky;
   top: 0;
   background-color: #fff;
+  padding-top: 63px;
+}
+.popup-calendar__btn{
+  position: absolute;
+  top: 5px;
+  right: 118px;
 }
 .popupDey{
   z-index: 20;
@@ -265,12 +271,12 @@ body{
   height: 50px;
   background-color: var(--background-5);
 }
-
 .calendar__btn{
   border-radius: 5px;
   padding: 10px;
   color: var(--background-1);
   background-color: var(--background-5);
+  height: 50px;
 }
 .popupDey__sort-big{
   border-radius: 5px;
@@ -373,6 +379,17 @@ body{
 
 ._delete td{
   background-color: var(--background-remove);
+  transition: background-color .1s;
+}
+/* td{
+  transition: background-color 4s;
+} */
+._active-scrol-tim td{
+  transition: background-color 4s;
+}
+._active-scrol td{
+  background-color: #7cb342;
+  transition: background-color 0s;
 }
 .td__date{
   width: 185px;

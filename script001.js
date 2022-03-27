@@ -26,6 +26,7 @@ const popupDey = document.querySelector('.popupDey_js');
 const popupRenderDey = document.querySelector('.popupRenderDey_js');
 
 const popupButtonUp = document.querySelector(".popupButtonUp_js");
+const calendarMonthWrapper = document.querySelector(".calendar__month-wrapper_js");
 const calendarPopap = document.querySelector(".calendar-popap_js");
 
 const fon = document.querySelector('.fon_js');
@@ -43,7 +44,100 @@ const keyActiveColor = 'fgh-activeColor';
 const inputValue = 'fgh-inputValue';
 const oneInputValue = 'fgh-oneInputValue';
 
+
+
+// создает календарь переданого года и рендерит в переданный html елемент
+createCalendar(2022, calendarMonthWrapper);
+
 // <<<<<<<<<<<<<<<< function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// создает календарь переданого года и рендерит в переданный html елемент
+function createCalendar(createYear, elementHtml) {
+
+  let year = createYear;// год
+  let month = 0;//Месяц (от 0 до 11)
+  let dayWeek;// день нидели в котором начинается месяц 0- ето воскресения (Недiля)
+  let monthDeyLength;//количество дней в месяце
+
+  // Очещаем елемент на html странице куда будум рендерити
+  elementHtml.innerHTML = '';
+
+  for (let i = 0; i < 12; i++) {
+    // Рендерит месяц в elementHtml
+    renderCalendar(elementHtml);
+    month++;
+  }
+
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<< function >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // создает дату
+  function createDate(year, month, dey) {
+    let date = new Date(year, month, dey);//(год  / месяц от 0 до 11 / число)
+    return date;
+  }
+  // выщитует количество дней в месяце
+  function calculateDatesMonth(year, month) {
+    let date1 = createDate(year, month, 1); //(год / месяц от 0 до 11 / число)
+    let date2 = createDate(year, month + 1, 1);//(год  / месяц от 0 до 11 / число)
+    let date3 = Math.round((date2 - date1) / 1000 / 3600 / 24); //вищитуем количестао дней
+    return date3;
+  }
+  // получаем день нидели в котором начинается месяц
+  function getDayhWeek(year, month) {
+    let date = createDate(year, month, 1);
+    let dayWeek = date.getDay();
+    return dayWeek;
+  }
+  // Рендерит месяц 
+  function renderCalendar(htmlElement) {
+    const months = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
+
+    // ------------------------------------------
+    let calendarMonthInner = document.createElement("div");
+    calendarMonthInner.className = "calendar__month-inner calendar__month-inner_js";
+    let calendarMonthName = document.createElement("div");
+    calendarMonthName.className = "calendar__month-name";
+    calendarMonthName.innerHTML = months[month];
+    calendarMonthInner.insertAdjacentElement('afterbegin', calendarMonthName);
+
+    let calendarList = document.createElement("ul");
+    calendarList.className = "calendar__list";
+    // -------------------------------------------
+
+    //получаем количество дней в месяце
+    monthDeyLength = calculateDatesMonth(year, month);
+    // получаем день нидели в котором начинается месяц
+    dayWeek = getDayhWeek(year, month);
+
+    if (dayWeek == 0) {
+      for (let i = 0; i < 6; i++) {
+        const calendarDey = `
+      <li class="calendar__dey color-non"></li>
+    `;
+        calendarList.insertAdjacentHTML('beforeend', calendarDey);
+      }
+    } else {
+      for (let i = 0; i < dayWeek - 1; i++) {
+        const calendarDey = `
+      <li class="calendar__dey color-non"></li>
+    `;
+        calendarList.insertAdjacentHTML('beforeend', calendarDey);
+      }
+    }
+
+    for (let i = 1; i < monthDeyLength + 1; i++) {
+      const calendarDey = `
+      <li class="calendar__dey calendar__dey_js _dey${i}-${month}-${year}" 
+             data-dey="${i} ${months[month]} ${year}" 
+             data-deydata="${i}-${month}-${year}">
+         ${i}
+      </li>
+    `;
+      calendarList.insertAdjacentHTML('beforeend', calendarDey);
+    }
+    calendarMonthInner.insertAdjacentElement('beforeend', calendarList);
+    htmlElement.append(calendarMonthInner);
+  }
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<< function >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+}
 // Уберает активный цвет input
 function removeActiveColor() {
   inputColor.forEach(item => {
@@ -213,13 +307,28 @@ function changeBgNumbers(color) {
   numberDelete.style.backgroundColor = color;
 }
 
+// выдиляет дни в календаре
+function addActiveDeyCalendar (obgectDey){
+  const calendarDeyAll = document.querySelectorAll('.calendar__dey_js ');
+  calendarDeyAll.forEach(element => {
+    element.classList.remove('_active');
+  });
+
+  setTimeout(() => {
+    const calendarDey = calendarMonthWrapper.querySelector(`._dey${obgectDey.numberDeta}-${obgectDey.month - 1}-${obgectDey.year}`);
+    calendarDey.classList.add('_active'); 
+  }, 1); 
+}
 // рендерит переданный обект в начало попапа
 function renderValuePopup(arrayValue) {
   if (!arrayValue.value1) {
     arrayValue.value1 = "";
   }
+  // выдиляет дни в календаре
+  addActiveDeyCalendar(arrayValue);
+
   let valueHtml = `
-     <tr class="popup__table-tr_js" id="${arrayValue.miliseconds}">
+     <tr class="popup__table-tr_js _teblepopup${arrayValue.numberDeta}-${arrayValue.month - 1}-${arrayValue.year}" id="${arrayValue.miliseconds}">
         <td class="td__date">${arrayValue.date}</td>
         <td class="${arrayValue.background2} td__value">${arrayValue.value1}</td>
         <td class="${arrayValue.background} td__value">${arrayValue.value}</td>
@@ -409,16 +518,6 @@ if (isEmpty(objectLocalStorage)) {
   input1JsInput2Js();
 }
 
-// рендерим значения в попап
-const arrayValues = getLocalStorage(oneInputValue, false);
-if (arrayValues.length) {
-  valuesLength.innerText = arrayValues.length;
-  arrayValues.forEach(item => {
-    // рендерит етот обект в попап
-    renderValuePopup(item);
-  });
-}
-
 // =================== // при загрузке странице ========================
 
 // <<<<<<<<<<<<<<<< при клике на странице >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -572,6 +671,10 @@ document.addEventListener('click', (e) => {
    
   if (e.target.closest('.calendar__btn_js')){
     calendarPopap.classList.add('_active');
+    let arrayValue = getLocalStorage(oneInputValue, false);
+    arrayValue.forEach(element => {
+      addActiveDeyCalendar(element);
+    });
   }
 
   // при клики скрывает popupDey
@@ -785,6 +888,7 @@ document.addEventListener('click', (e) => {
 
   // при клики выбираем поле для удаления
   if (e.target.closest('.popup__table-tr_js')) {
+
     if (selectButton.classList.contains("_active")) {
       if (!e.target.closest('.popup__table-tr_js').classList.contains('_delete')) {
         e.target.closest('.popup__table-tr_js').classList.add('_delete');
@@ -817,26 +921,7 @@ document.addEventListener('click', (e) => {
   }
   // при клики
   if (e.target.closest('.popupButtonUp_js')) {
-    handleButtonClick();
-
-    function handleButtonClick() {
-      const popupTop = document.querySelector(".popup_js");
-      const popupDeyTop = document.querySelector(".popupDey_js");
-      if (popupTop.classList.contains('_active')) {
-        popupTop.scroll({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        });
-      }
-      if (popupDeyTop.classList.contains('_active')) {
-        popupDeyTop.scroll({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        });
-      }
-    }
+    scrolling(0);
   }
   
 });
@@ -1051,7 +1136,7 @@ function renderTable(day, month, year, counterTableId, arrayDey) {
   const months = ['січеня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
 
   const htmlTable = `
-      <div class="popupDeyTable">
+      <div class="popupDeyTable _table${day}-${month - 1}-${year}">
         <div class="flex-block tebleTitle">
           <p>${day} ${months[month - 1]} ${year}</p>
           <p>
@@ -1144,33 +1229,23 @@ function sortPopupDeyTable() {
 // рендерит таблицы в попап popupRenderDey
 function renderTable2(day, month, year, counterTableId, arrayDey) {
   let idTable = `table${counterTableId}`;
+  
+  const months = ['січеня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
 
-  const calendarDeyAll = calendarMonthWrapper.querySelectorAll(`.calendar__dey_js`);
-  calendarDeyAll.forEach((item) =>{
-    item.classList.remove('_active');
-  });
-  setTimeout(timeout,10);
-  function timeout(){
-    const calendarDey = calendarMonthWrapper.querySelector(`._dey${day}-${month - 1}-${year}`);
-    calendarDey.classList.add('_active');
-
-    const months = ['січеня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
-
-    const htmlTable = `
-      <div class="popupDeyTable font__smail _table${day}-${month - 1}-${year}">
-        <div class="flex-block tebleTitle">
-          <p>${day} ${months[month - 1]} ${year}</p>
-          <p>${arrayDey.length} зн.</p>
-        </div>
-        <div class="table__wrapper">
-          <div class="table__inner table__inner1-${idTable}_js table__sort_js"> </div>
-          <div class="table__inner table__inner2-${idTable}_js table__sort_js"> </div>
-        </div>
+  const htmlTable = `
+    <div class="popupDeyTable font__smail _table${day}-${month - 1}-${year}">
+      <div class="flex-block tebleTitle">
+        <p>${day} ${months[month - 1]} ${year}</p>
+        <p>${arrayDey.length} зн.</p>
       </div>
-    `;
-    popupRenderDey.insertAdjacentHTML('beforeend', htmlTable);
-    renderDeyFunc2(arrayDey, idTable);
-  }
+      <div class="table__wrapper">
+        <div class="table__inner table__inner1-${idTable}_js table__sort_js"> </div>
+        <div class="table__inner table__inner2-${idTable}_js table__sort_js"> </div>
+      </div>
+    </div>
+  `;
+  popupRenderDey.insertAdjacentHTML('beforeend', htmlTable);
+  renderDeyFunc2(arrayDey, idTable);
 }
 
 function renderDeyFunc2(arrayValueDey, idTable) {
@@ -1377,103 +1452,8 @@ function sortPopupDeyTable2() {
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-const calendarMonthWrapper = document.querySelector('.calendar__month-wrapper_js');
 const calendarMonthInner = document.querySelectorAll('.calendar__month-inner_js');
 const fon2 = document.querySelector('.fon2_js');
-
-// логика отрисовки календаря ---------------------------------------------------------------
-
-// создает календарь переданого года и рендерит в переданный html елемент
-function createCalendar(createYear, elementHtml) {
-
-  let year = createYear;// год
-  let month = 0;//Месяц (от 0 до 11)
-  let dayWeek;// день нидели в котором начинается месяц 0- ето воскресения (Недiля)
-  let monthDeyLength;//количество дней в месяце
-
-  // Очещаем елемент на html странице куда будум рендерити
-  elementHtml.innerHTML = '';
-
-  for (let i = 0; i < 12; i++) {
-    // Рендерит месяц в elementHtml
-    renderCalendar(elementHtml);
-    month++;
-  }
-
-  // <<<<<<<<<<<<<<<<<<<<<<<<<<< function >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // создает дату
-  function createDate(year, month, dey) {
-    let date = new Date(year, month, dey);//(год  / месяц от 0 до 11 / число)
-    return date;
-  }
-  // выщитует количество дней в месяце
-  function calculateDatesMonth(year, month) {
-    let date1 = createDate(year, month, 1); //(год / месяц от 0 до 11 / число)
-    let date2 = createDate(year, month + 1, 1);//(год  / месяц от 0 до 11 / число)
-    let date3 = Math.round((date2 - date1) / 1000 / 3600 / 24); //вищитуем количестао дней
-    return date3;
-  }
-  // получаем день нидели в котором начинается месяц
-  function getDayhWeek(year, month) {
-    let date = createDate(year, month, 1);
-    let dayWeek = date.getDay();
-    return dayWeek;
-  }
-  // Рендерит месяц 
-  function renderCalendar(htmlElement) {
-    const months = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-
-    // ------------------------------------------
-    let calendarMonthInner = document.createElement("div");
-    calendarMonthInner.className = "calendar__month-inner calendar__month-inner_js";
-    let calendarMonthName = document.createElement("div");
-    calendarMonthName.className = "calendar__month-name";
-    calendarMonthName.innerHTML = months[month];
-    calendarMonthInner.insertAdjacentElement('afterbegin', calendarMonthName);
-
-    let calendarList = document.createElement("ul");
-    calendarList.className = "calendar__list";
-    // -------------------------------------------
-
-    //получаем количество дней в месяце
-    monthDeyLength = calculateDatesMonth(year, month);
-    // получаем день нидели в котором начинается месяц
-    dayWeek = getDayhWeek(year, month);
-
-    if (dayWeek == 0) {
-      for (let i = 0; i < 6; i++) {
-        const calendarDey = `
-      <li class="calendar__dey color-non"></li>
-    `;
-        calendarList.insertAdjacentHTML('beforeend', calendarDey);
-      }
-    } else {
-      for (let i = 0; i < dayWeek - 1; i++) {
-        const calendarDey = `
-      <li class="calendar__dey color-non"></li>
-    `;
-        calendarList.insertAdjacentHTML('beforeend', calendarDey);
-      }
-    }
-
-    for (let i = 1; i < monthDeyLength + 1; i++) {
-      const calendarDey = `
-      <li class="calendar__dey calendar__dey_js _dey${i}-${month}-${year}" 
-             data-dey="${i} ${months[month]} ${year}" 
-             data-deydata="${i}-${month}-${year}">
-         ${i}
-      </li>
-    `;
-      calendarList.insertAdjacentHTML('beforeend', calendarDey);
-    }
-    calendarMonthInner.insertAdjacentElement('beforeend', calendarList);
-    htmlElement.append(calendarMonthInner);
-  }
-  // <<<<<<<<<<<<<<<<<<<<<<<<<<< function >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-}
-
-// создает календарь переданого года и рендерит в переданный html елемент
-createCalendar(2022, calendarMonthWrapper);
 
 calendarPopap.addEventListener('click', (e) => {
   if (e.target.closest('.calendar-popup__close_js')){
@@ -1499,7 +1479,13 @@ calendarPopap.addEventListener('click', (e) => {
             
       calendarPopap.classList.remove('_active');//скрывает календарь
       calendarBtn.innerHTML = e.target.dataset.dey;
-      scrollDey(e.target.dataset.deydata);
+      const popupReverse = document.querySelector('.popup__reverse_js');
+
+      if (popupReverse.classList.contains('_reverse') || popupDey.classList.contains('_active')){
+        scrollDey1(e.target.dataset.deydata);
+      }else{
+        scrollDey2(e.target.dataset.deydata);
+      }
     }
     calendarMonthInner.classList.toggle('_active');//маштабирует месяц
     calendarMonthInner.classList.toggle('_selection');// дозволяет запрещает hover на днях
@@ -1534,9 +1520,21 @@ calendarPopap.addEventListener('click', (e) => {
   }
 });
 
-function scrollDey(data){
+function scrollDey1(data){
   const scrolElement = document.querySelector(`._table${data}`);
   scrolling(scrolElement.offsetTop - 73);
+}
+function scrollDey2(data){
+  const scrolElement = document.querySelector(`._teblepopup${data}`); 
+  scrolElement.classList.add('_active-scrol-tim');
+  scrolElement.classList.add('_active-scrol');
+  setTimeout(() => {
+    scrolElement.classList.remove('_active-scrol');
+  }, 400);
+  setTimeout(() => {
+    scrolElement.classList.remove('_active-scrol-tim');
+  }, 6000);
+  scrolling(scrolElement.offsetTop);
 }
 
 function scrolling(top) {
