@@ -278,12 +278,20 @@ body{
   background-color: var(--background-5);
   height: 50px;
 }
-.popupDey__sort-big{
+.popupDey__sort-btn{
   border-radius: 5px;
   width: 50px;
   height: 50px;
   background-color: var(--background-5);
   color: var(--background-1);
+}
+.popupDey__sort-btn._twoSortActive{
+  transform: scale(0.9);
+  background-color: #8bc34a;
+}
+.popupDey__sortM,
+.popupDey__sortC{
+  display: none;
 }
 .popup__reverse{
   position: absolute;
@@ -400,7 +408,12 @@ body{
 .td__value{
   text-align: center;
 }
-
+.td__value-valueAverage._active td:first-child,
+.td__value-valueBig._active td:first-child,
+.td__value-valueSmall._active td:first-child{
+  background-color: #7cb342;
+  color: #fff;
+}
 .flex-block{
   display: flex;
   justify-content: space-between;

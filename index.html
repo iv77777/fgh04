@@ -18,7 +18,7 @@
   <!-- //fonts -->
   <title>V-04</title>
   <link rel="stylesheet" href="reset.css">
-  <link rel="stylesheet" href="style001.css?_10">
+  <link rel="stylesheet" href="style001.css?_11">
 </head>
 <body class="unselectable">
 
@@ -106,7 +106,7 @@
 
 <div class="popup popup_js">
   <div class="popup__wrapper">
-    <div class="popup__top">
+    <div class="popup__top popup__top_js">
       <button class="popup__close popup__close_js"></button>
       <button class="calendar__btn popup-calendar__btn calendar__btn_js">По дате</button>
       <button class="popup__reverse popup__reverse_js">R</button>
@@ -147,7 +147,8 @@
             <option value="4">Самые старые</option>
             <option value="2">По значению больше</option>
             <option value="3">По значению меньше</option>
-            <option value="7">Средние по часам</option>
+            <option value="7">Среднее по часам</option>
+            <option value="26">Среднее за день</option>
 
             <option value="5">1-Сутки больше</option>
             <option value="6">1-Сутки меньше</option>
@@ -188,7 +189,10 @@
   <div class="popupDey__top flex-block">
     <button class="popup__close popupDey__close popupDey__close_js"></button>
     <button class="calendar__btn calendar__btn_js">По дате</button>
-    <button class="popupDey__sort-big popupDey__sort_js">Б</button>
+    <button class="popupDey__sort-btn popupDey__sort-btn_js popupDey__sort_js">Б</button>
+
+    <button class="popupDey__sort-btn popupDey__sort-btn_js popupDey__sortC popupDey__sortC_js">С</button>
+    <button class="popupDey__sort-btn popupDey__sort-btn_js popupDey__sortM popupDey__sortM_js">М</button>
   </div>
   <div class="popupRenderDey_js">
   <!-- рендерим -->
@@ -226,7 +230,7 @@
 </div>
 
 <script src="./smoothscroll.js"></script>
-<script src="script001.js?_10"></script>
+<script src="script001.js?_11"></script>
 </body>
 </html>
 
